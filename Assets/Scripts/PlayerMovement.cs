@@ -11,6 +11,11 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector2 moveDirection = new Vector2(0.00f, 0.00f);
 
+    private void Update()
+    {
+        //HandlePlayerMovement();
+    }
+
     private void Start()
     {
         characterController = this.GetComponent<CharacterController>();
