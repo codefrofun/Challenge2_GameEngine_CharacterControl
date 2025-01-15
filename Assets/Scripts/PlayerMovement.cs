@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
         characterController = this.GetComponent<CharacterController>();
     }
 
-    void HandlePlayerMovement()
+    void HandlePlayerMovement(Vector2 moveDirection)
     {
         characterController.Move(moveDirection * Time.deltaTime);
     }
