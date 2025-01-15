@@ -18,7 +18,11 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        Debug.Log("Move has been activated/pressed" + context.ReadValue<Vector2>());
+        if (context.performed)
+        {
+            Debug.Log("Move has been activated/pressed" + context.ReadValue<Vector2>());
+            InputActions.MovePlayerEvent?.Invoke(context.ReadValue<Vector2>());
+        }
     }
 }
 
