@@ -9,14 +9,16 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
 {
 
     public GameInput gameInput;
+    // Static event to trigger car movement and stop actions
     public static Action MoveCar;
     public static event Action StopCar;
 
     void Awake()
     {
+        // Initialize the gameInput and enable the input actions
         gameInput = new GameInput();
         gameInput.Player.Enable();
-
+        // Set up the input callback methods for player actions
         gameInput.Player.SetCallbacks(this);
     }
 
@@ -27,6 +29,8 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
            // Debug.Log("Move has been activated/pressed" + context.ReadValue<Vector2>());
             InputActions.MovePlayerEvent?.Invoke(context.ReadValue<Vector2>());
         }
+
+        // Always invoke MovePlayerEvent with the updated movement vector
         Vector2 moveInput = context.ReadValue<Vector2>();
         InputActions.MovePlayerEvent?.Invoke(moveInput);
     }
@@ -53,7 +57,7 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
         }
     }
 
-
+    // Disable the input actions when the script is disabled
     void OnDisable()
     {
         gameInput.Player.Disable();
@@ -62,6 +66,9 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
 
 public static class InputActions
 {
+    // Event to move the player based on input
     public static Action <Vector2> MovePlayerEvent;
+
+    // Events to control car movement (start/stop)
     public static Action MoveCar;
 }

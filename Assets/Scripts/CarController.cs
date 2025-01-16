@@ -5,13 +5,15 @@ using UnityEngine;
 public class CarController : MonoBehaviour
 {
     [SerializeField] public float carDrive = 1.5f;
-    [SerializeField] private AudioClip engineSound;
+    [SerializeField] private AudioClip engineSound; // Audio clip to play the engine sound
     private AudioSource audioSource;
+    // Reference to the Rigidbody2D component for physics-based movement
     public Rigidbody2D rb;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();  
+        rb = GetComponent<Rigidbody2D>();
+        // Disable gravity and prevent the car from moving along the Y-axis or rotating
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
 
@@ -25,6 +27,9 @@ public class CarController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Method to drive the car by applying force in the right direction
+    /// </summary>
     void DriveCar()
     {
         Debug.Log("Car is driving!");  // Ensure the method is called
@@ -48,7 +53,7 @@ public class CarController : MonoBehaviour
         // Stop the engine sound
         if (audioSource != null && audioSource.isPlaying)
         {
-            audioSource.Stop();
+            audioSource.Stop();  // Stop the engine sound if it's playing
         }
     }
 

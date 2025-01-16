@@ -9,7 +9,9 @@ public class WorkerAction : MonoBehaviour
 
     void Start()
     {
+        // Get the Rigidbody2D component attached to the GameObject
         rb = GetComponent<Rigidbody2D>();
+        // Disable gravity and prevent the worker from moving along the Y-axis or rotating
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
     }
