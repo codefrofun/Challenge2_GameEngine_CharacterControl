@@ -1,24 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
+    [SerializeField] private float moveSpeed = 2.0f;
     public CharacterController characterController;
-    public float moveSpeed = 2.0f;
+    public Vector2 moveDirection = Vector2.zero;
+    private CarController carController;
 
-    public Vector2 moveDirection = new Vector2(0.00f, 0.00f);
+
+    private void Awake()
+    {
+        characterController = this.GetComponent<CharacterController>();
+
+        InputActions.MovePlayerEvent += UpdateMoveVector;
+
+        InputManager.InteractionEvent += OnInteraction;  // Listen for interaction
+    }
+
+    private void UpdateMoveVector(Vector2 InputVector)
+    {
+        moveDirection = InputVector;
+    }
 
     private void Update()
     {
-        //HandlePlayerMovement();
+        HandlePlayerMovement(moveDirection);
     }
 
-    private void Start()
+    private void OnInteraction()
     {
-        characterController = this.GetComponent<CharacterController>();
+        if (carController != null)
+        {
+            // Start driving when the player presses space
+            carController.StartDriving();
+            Debug.Log("Car started driving!");
+        }
+        else
+        {
+            Debug.Log("CarController reference is null!");
+        }
     }
 
     void HandlePlayerMovement(Vector2 moveDirection)
@@ -29,12 +53,13 @@ public class PlayerMovement : MonoBehaviour
     void OnEnable()
     {
         // Subscribe to the action
+        carController = FindObjectOfType<CarController>();
         InputActions.MovePlayerEvent += HandlePlayerMovement;
     }
 
     void OnDisable()
     {
-        // Unsubscribe
+        InputActions.MovePlayerEvent -= UpdateMoveVector;
         InputActions.MovePlayerEvent -= HandlePlayerMovement;
     }
 }
