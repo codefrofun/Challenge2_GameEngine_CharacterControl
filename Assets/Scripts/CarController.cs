@@ -9,10 +9,9 @@ public class CarController : MonoBehaviour
     private AudioSource audioSource;
     public Rigidbody2D rb;
 
-
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();  // Ability to jump
+        rb = GetComponent<Rigidbody2D>();  
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
 
@@ -41,27 +40,29 @@ public class CarController : MonoBehaviour
 
     void StopCar()
     {
+        Debug.Log("Car stopped!");
+
         // Stop the car's movement by setting its velocity to zero
         rb.velocity = Vector2.zero;
 
-        // Stop the engine sound when the car stops
+        // Stop the engine sound
         if (audioSource != null && audioSource.isPlaying)
         {
-            audioSource.Stop();  // Stop playing the engine sound
+            audioSource.Stop();
         }
-
-        Debug.Log("Car stopped!");
     }
 
     void OnEnable()
     {
-        // Subscribe to the MoveCar event
+        // Subscribe to the MoveCar and StopCar events
         InputManager.MoveCar += DriveCar;
+        InputManager.StopCar += StopCar;
     }
 
     void OnDisable()
     {
-        // Unsubscribe from the MoveCar event
+        // Unsubscribe from the MoveCar and StopCar events
         InputManager.MoveCar -= DriveCar;
+        InputManager.StopCar -= StopCar;
     }
 }

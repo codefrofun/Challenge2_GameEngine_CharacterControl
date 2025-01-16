@@ -9,7 +9,8 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
 {
 
     public GameInput gameInput;
-    public static event System.Action MoveCar;
+    public static Action MoveCar;
+    public static event Action StopCar;
 
     void Awake()
     {
@@ -38,11 +39,6 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
         }
     }
 
-    void OnDisable()
-    {
-        gameInput.Player.Disable();
-    }
-
     public void OnCarWorkerSound(InputAction.CallbackContext context)
     {
         Debug.Log("Space was pressed!");
@@ -50,6 +46,17 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
         {
             MoveCar?.Invoke(); // Trigger the car movement
         }
+
+        if (context.canceled)  // Detect when Space is released
+        {
+            StopCar?.Invoke(); // Trigger the car stop
+        }
+    }
+
+
+    void OnDisable()
+    {
+        gameInput.Player.Disable();
     }
 }
 
