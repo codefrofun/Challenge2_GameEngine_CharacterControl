@@ -7,10 +7,10 @@ using JetBrains.Annotations;
 
 public class InputManager : MonoBehaviour, GameInput.IPlayerActions
 {
-    public static event System.Action MovePlayerEvent;   // For movement
-    public static event System.Action InteractionEvent;  // For space bar
 
     public GameInput gameInput;
+    public static event System.Action MoveCar;
+
     void Awake()
     {
         gameInput = new GameInput();
@@ -26,13 +26,15 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
            // Debug.Log("Move has been activated/pressed" + context.ReadValue<Vector2>());
             InputActions.MovePlayerEvent?.Invoke(context.ReadValue<Vector2>());
         }
+        Vector2 moveInput = context.ReadValue<Vector2>();
+        InputActions.MovePlayerEvent?.Invoke(moveInput);
     }
 
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (context.started || context.performed)
         {
-            InteractionEvent?.Invoke();  // Trigger interaction when spacebar is pressed
+            InputActions.MoveCar?.Invoke();   // Trigger interaction when spacebar is pressed
         }
     }
 
@@ -43,11 +45,16 @@ public class InputManager : MonoBehaviour, GameInput.IPlayerActions
 
     public void OnCarWorkerSound(InputAction.CallbackContext context)
     {
-        //
+        Debug.Log("Space was pressed!");
+        if (context.started)  // Detect when Space is pressed
+        {
+            MoveCar?.Invoke(); // Trigger the car movement
+        }
     }
 }
 
 public static class InputActions
 {
     public static Action <Vector2> MovePlayerEvent;
+    public static Action MoveCar;
 }

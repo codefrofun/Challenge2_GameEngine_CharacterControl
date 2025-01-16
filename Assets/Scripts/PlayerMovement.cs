@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 2.0f;
     public CharacterController characterController;
     public Vector2 moveDirection = Vector2.zero;
-    private CarController carController;
 
 
     private void Awake()
@@ -17,8 +16,6 @@ public class PlayerMovement : MonoBehaviour
         characterController = this.GetComponent<CharacterController>();
 
         InputActions.MovePlayerEvent += UpdateMoveVector;
-
-        InputManager.InteractionEvent += OnInteraction;  // Listen for interaction
     }
 
     private void UpdateMoveVector(Vector2 InputVector)
@@ -31,20 +28,6 @@ public class PlayerMovement : MonoBehaviour
         HandlePlayerMovement(moveDirection);
     }
 
-    private void OnInteraction()
-    {
-        if (carController != null)
-        {
-            // Start driving when the player presses space
-            carController.StartDriving();
-            Debug.Log("Car started driving!");
-        }
-        else
-        {
-            Debug.Log("CarController reference is null!");
-        }
-    }
-
     void HandlePlayerMovement(Vector2 moveDirection)
     {
         characterController.Move(moveDirection * Time.deltaTime);
@@ -53,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
     void OnEnable()
     {
         // Subscribe to the action
-        carController = FindObjectOfType<CarController>();
         InputActions.MovePlayerEvent += HandlePlayerMovement;
     }
 
